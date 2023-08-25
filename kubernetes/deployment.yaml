@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-chaos-monkey
+  labels:
+    app: pod-chaos-monkey
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pod-chaos-monkey
+  template:
+    metadata:
+      labels:
+        app: pod-chaos-monkey
+    spec:
+      containers:
+      - name: pod-chaos-monkey-deployment
+        image: docker.io/seananderson2032/chaosmonkey1
+        resources:
+          requests:
+            cpu: "100m"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
