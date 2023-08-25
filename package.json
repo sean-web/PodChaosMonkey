@@ -1,0 +1,22 @@
+{
+  "name": "podchaosmonkey",
+  "version": "1.0.0",
+  "description": "A nodeJs based program that deletes a pod from a given namespace on a specified time interval",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sean-web/PodChaosMonkey.git"
+  },
+  "author": "sean-web",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sean-web/PodChaosMonkey/issues"
+  },
+  "homepage": "https://github.com/sean-web/PodChaosMonkey#readme",
+  "dependencies": {
+    "@kubernetes/client-node": "^0.18.1"
+  }
+}
