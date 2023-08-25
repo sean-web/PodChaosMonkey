@@ -1,47 +1,43 @@
 const k8s = require('@kubernetes/client-node');
 
-const kc = new k8s.KubeConfig();
-kc.loadFromDefault();
+const NAMESPACE = 'application';
+const INTERVAL = 10000;
 
-const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
-const namespace = 'application'
-
-const podToDelete = (podNames) => {
-  let selectedPodToDelete = Math.floor(Math.random() * (podNames.length))
-  //prevents chaos-monkey pod from deleting itself
-  while(podNames[selectedPodToDelete].includes('pod-chaos-monkey')) {
-    selectedPodToDelete = Math.floor(Math.random() * (podNames.length -1))
-  }
-  return podNames[selectedPodToDelete]
-}
+const getRandomPodIndex = (podCount) => {
+  return Math.floor(Math.random() * podCount);
+};
 
 const main = async () => {
-    let runMainApplication = setTimeout(async function deleteRandomPod()  {
-        try {
-            const podsRes = await k8sApi.listNamespacedPod(namespace, undefined, "false", undefined, undefined);
-            const pods = podsRes.body.items
-            let podNames = []
-            // gets names of all pods in the namespace
-            for (const pod of pods) {
-                if (pod.metadata && pod.metadata.name) {
-                  podNames.push(pod.metadata.name);
-                }
-              }
-            console.log(podNames)
-            try {
-                const selectedPodName = podToDelete(podNames)
-                k8sApi.deleteNamespacedPod(selectedPodName, namespace)
-                console.log("Pod " + selectedPodName + " in namespace " + namespace + " has been deleted!")
-            } catch (err) {
-                console.log(err)
-            }
-    
-        } catch (err) {
-            console.error(err);
-        }
+  const kc = new k8s.KubeConfig();
+  kc.loadFromDefault();
+  
+  const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 
-        runMainApplication = setTimeout(deleteRandomPod, 3000)
-    })
+  const deleteRandomPod = async () => {
+    try {
+      const podsRes = await k8sApi.listNamespacedPod(NAMESPACE, undefined, "false", undefined, undefined);
+      const pods = podsRes.body.items;
+      
+      const deletablePods = pods.filter(pod => !pod.metadata.name.includes('pod-chaos-monkey'));
+      
+      //deletes pod if a suitable one exists
+      if (deletablePods.length > 0) {
+        const selectedPodIndex = getRandomPodIndex(deletablePods.length);
+        const selectedPodName = deletablePods[selectedPodIndex].metadata.name;
+
+        await k8sApi.deleteNamespacedPod(selectedPodName, NAMESPACE);
+        console.log(`Pod ${selectedPodName} in namespace ${NAMESPACE} has been deleted!`);
+      } else {
+        console.log("No deletable pods found.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    
+    setTimeout(deleteRandomPod, INTERVAL);
+  };
+  
+  deleteRandomPod(); 
 };
 
 main();
