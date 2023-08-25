@@ -5,7 +5,7 @@ metadata:
   labels:
     app: pod-chaos-monkey
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: pod-chaos-monkey
@@ -20,6 +20,6 @@ spec:
         resources:
           requests:
             cpu: "100m"
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
