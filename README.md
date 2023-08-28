@@ -12,8 +12,8 @@ This application requires a Kubernetes cluster, tested using a local `v1.27.3` K
 
  This will deploy the following resources:
  - A `Namespace` named `workloads` where the application will run
- - A `Role` called `chaos monkey` that has permission to get, list, and delete pods
- - A `RoleBinding` that binds the `chaos monkey` role to the `workloads` service account
+ - A `Role` called `chaos-monkey` that has permission to get, list, and delete pods
+ - A `RoleBinding` that binds the `chaos-monkey` role to the `workloads` service account
  - A `Deployment` that creates a dummy workload, deploying 5 pods running the docker [hello-world image](https://hub.docker.com/_/hello-world).
  - A `Deployment` that creates a pod with a container running the `chaos-monkey` application.
 
