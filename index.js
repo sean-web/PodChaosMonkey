@@ -7,12 +7,12 @@ const getRandomPodIndex = (podCount) => {
   return Math.floor(Math.random() * podCount)
 }
 
-const main = async () => {
-  const kc = new k8s.KubeConfig()
-  kc.loadFromDefault()
+const kc = new k8s.KubeConfig()
+kc.loadFromDefault()
 
-  const k8sApi = kc.makeApiClient(k8s.CoreV1Api)
+const k8sApi = kc.makeApiClient(k8s.CoreV1Api)
 
+const main = async (k8sApi) => {
   const deleteRandomPod = async () => {
     try {
       const podsRes = await k8sApi.listNamespacedPod(NAMESPACE, undefined, 'false', undefined, undefined)
@@ -26,7 +26,6 @@ const main = async () => {
         const selectedPodName = deletablePods[selectedPodIndex].metadata.name
 
         await k8sApi.deleteNamespacedPod(selectedPodName, NAMESPACE)
-        console.log(`Pod ${selectedPodName} in namespace ${NAMESPACE} has been deleted!`)
       } else {
         console.log('No deletable pods found.')
       }
@@ -40,4 +39,6 @@ const main = async () => {
   deleteRandomPod()
 }
 
-main()
+main(k8sApi)
+
+module.exports = { getRandomPodIndex, main }

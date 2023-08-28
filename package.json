@@ -4,7 +4,7 @@
   "description": "A nodeJs based program that deletes a pod from a given namespace on a specified time interval",
   "main": "index.js",
   "scripts": {
-    "test": "standard && echo \"Error: no test specified\" && exit 1"
+    "test": "standard && jest --coverage  --runInBand --detectOpenHandles --forceExit"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,22 @@
     "@kubernetes/client-node": "^0.18.1"
   },
   "devDependencies": {
+    "jest": "^29.6.4",
     "standard": "^17.1.0"
+  },
+  "env": {
+    "jest": true
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "html"
+    ]
   }
 }
