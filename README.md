@@ -2,7 +2,7 @@
 A deployable Kubernetes application that randomly deletes pods in a `workloads` namespace.
 
 ## Running the application
-This application requires a Kubernetes cluster, tested using a local `v1.27.3` Kubernetes cluster using [kind](https://kind.sigs.k8s.io/).
+This application requires a Kubernetes cluster, and has been tested using a local `v1.27.3` Kubernetes cluster using [kind](https://kind.sigs.k8s.io/).
 
 **To deploy the application on a Kubernetes cluster:**
 1. Clone this repo, or download the [deploy-chaos-monkey](https://github.com/sean-web/PodChaosMonkey/blob/main/kubernetes/deploy-chaos-monkey.yaml) file at a minimum.
